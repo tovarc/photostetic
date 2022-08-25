@@ -19,7 +19,7 @@ const Home: NextPage = () => {
           <img src="assets/logo.svg" alt="" />
           <Link href="/">
             <a className="border-2 px-6 py-2 border-gray-700 font-medium">
-              Go back to Photostetics
+              Go back to Photostetic
             </a>
           </Link>
         </div>
