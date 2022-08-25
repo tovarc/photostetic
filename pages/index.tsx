@@ -19,7 +19,7 @@ const Home: NextPage = () => {
           <img src="assets/logo.svg" alt="" />
           <Link href="/">
             <a className="border-2 px-6 py-2 border-gray-700 font-medium">
-              Go back to Photostetic
+              Go back to Photostetics
             </a>
           </Link>
         </div>
@@ -84,18 +84,18 @@ const Home: NextPage = () => {
               <path
                 d="M13.835 1.91821L20.9167 8.99988L13.835 16.0815"
                 stroke="white"
-                stroke-width="2"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeMiterlimit="10"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M1.08331 9H20.7183"
                 stroke="white"
-                stroke-width="2"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeMiterlimit="10"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           </button>
