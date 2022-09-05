@@ -16,7 +16,7 @@ const Header = () => {
 
       <header className="border-b-2 py-3 mb-5">
         <div className="container mx-auto flex items-center justify-between">
-          <Image src="assets/logo.svg" alt="" />
+          <Image src="/assets/logo.svg" alt="" width="200" height="38" />
           <Link href="https://photostetic.com/">
             <a className="border-2 px-6 py-2 border-gray-700 font-medium">
               Go back to Photostetic

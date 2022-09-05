@@ -84,15 +84,18 @@ const UploadImages = () => {
               className="shadow-lg p-4 grid grid-cols-2 gap-4 mb-5"
             >
               <div>
-                <div className="h-96 bg-gray-200 mb-3">
+                <div className="h-96 w-full overflow-hidden bg-gray-200 mb-3">
                   <Image
                     src={image.preview}
                     key={index}
-                    className="object-cover w-full h-full"
+                    width="100%"
+                    height="100%"
+                    layout="responsive"
+                    objectFit="cover"
                   />
                 </div>
                 <p>
-                  Image1.png
+                  {image.name}
                   <span
                     className="text-red-500 underline ml-3 cursor-pointer"
                     onClick={() => deleteImages(image)}
