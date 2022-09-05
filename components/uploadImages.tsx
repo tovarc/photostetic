@@ -1,7 +1,7 @@
 import { useState, useRef, ChangeEvent } from "react";
 import Image from "next/image";
 
-const UploadImages = () => {
+const UploadImages = ({ ...props }) => {
   const [images, setImages]: any = useState([]);
 
   const handleImages = (e: ChangeEvent<HTMLInputElement>) => {
@@ -32,8 +32,6 @@ const UploadImages = () => {
     const foundIndex = images.filter((x: any) => x.preview === image.preview);
 
     foundIndex[0].form[option] = event?.target.value;
-
-    console.log(images);
   };
 
   const furnitureOptions: string[] = [

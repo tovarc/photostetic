@@ -1,4 +1,4 @@
-const BasicInfo = () => {
+const BasicInfo = ({...props}) => {
   return (
     <>
       <div className="max-w-[885px] mx-auto">

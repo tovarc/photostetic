@@ -2,29 +2,37 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import React, { useState } from "react";
 import BasicInfo from "../components/BasicInfo";
+import Buttons from "../components/Buttons";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Steps from "../components/Steps";
 import UploadImages from "../components/uploadImages";
 
 const Home: NextPage = () => {
-  const [basicInfo, setBasicInfo] = useState(false);
-  const [uploadImages, setUploadImages] = useState(true);
-  const [finalize, setFinalize] = useState(false);
+  const [step, setStep] = useState(0);
+
+  const nextStep = () => {
+    if (step === 2) return;
+    setStep(step + 1);
+  };
+  const prevStep = () => {
+    if (step === 0) return;
+    setStep(step - 1);
+  };
 
   return (
     <>
       <Header />
 
       <main>
-        <Steps />
+        <Steps step={step} />
 
-        {basicInfo && <BasicInfo />}
+        {step === 0 && <BasicInfo nextStep={nextStep} prevStep={prevStep} />}
 
         {/* Upload Images */}
-        {uploadImages && <UploadImages />}
+        {step === 1 && <UploadImages nextStep={nextStep} prevStep={prevStep} />}
 
-        {finalize && (
+        {step === 2 && (
           <>
             <div className="max-w-[885px] mx-auto mb-10">
               <h1 className="text-3xl font-semibold mb-3">Finalize Job</h1>
@@ -104,43 +112,10 @@ const Home: NextPage = () => {
                 </label>
               </div>
             </div>
-            <div className="max-w-[885px] mx-auto mb-10">
-              <div className="flex items-center justify-between">
-                <button className="px-4 py-2 font-medium flex items-center w-[200px] rounded-sm mb-28">
-                  <svg
-                    width="22"
-                    height="18"
-                    viewBox="0 0 22 18"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="mr-5"
-                  >
-                    <path
-                      d="M8.16499 16.0817L1.08333 9L8.16499 1.91833"
-                      stroke="#222222"
-                      strokeWidth="2"
-                      strokeMiterlimit="10"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M20.9167 9H1.28167"
-                      stroke="#222222"
-                      strokeWidth="2"
-                      strokeMiterlimit="10"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  Previous
-                </button>
-                <button className="bg-black text-white px-4 py-3 font-medium rounded-sm mb-28">
-                  Checkout
-                </button>
-              </div>
-            </div>
           </>
         )}
+
+        <Buttons step={step} nextStep={nextStep} prevStep={prevStep} />
       </main>
 
       <Footer />
