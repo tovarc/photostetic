@@ -1,11 +1,16 @@
 import { useState, useRef, ChangeEvent } from "react";
+import Image from "next/image";
 
 const UploadImages = () => {
   const [images, setImages]: any = useState([]);
 
   const handleImages = (e: ChangeEvent<HTMLInputElement>) => {
-    for (const file of e.target.files) {
-      file["preview"] = URL.createObjectURL(file);
+    if (!e.target.files) return;
+
+    for (let i = 0; i < e.target.files.length; i++) {
+      const image: any = e.target.files[i];
+
+      image["preview"] = URL.createObjectURL(image);
 
       const form = {
         furniture: "",
@@ -13,9 +18,9 @@ const UploadImages = () => {
         comments: "",
       };
 
-      file["form"] = form;
+      image["form"] = form;
 
-      setImages((t: any) => [...t, file]);
+      setImages((t: any) => [...t, image]);
     }
   };
 
@@ -27,9 +32,11 @@ const UploadImages = () => {
     const foundIndex = images.filter((x: any) => x.preview === image.preview);
 
     foundIndex[0].form[option] = event?.target.value;
+
+    console.log(images);
   };
 
-  const furnitureOptions = [
+  const furnitureOptions: string[] = [
     "Modern",
     "Industrial",
     "Traditional",
@@ -37,7 +44,7 @@ const UploadImages = () => {
     "Beach",
   ];
 
-  const hiddenFileInput = useRef<HTMLElement>(null);
+  const hiddenFileInput = useRef<HTMLInputElement>(null);
 
   const handleClick = (): void => {
     hiddenFileInput?.current?.click();
@@ -71,13 +78,16 @@ const UploadImages = () => {
         )}
 
         <div>
-          {images.map((image: any) => (
-            <div className="shadow-lg p-4 grid grid-cols-2 gap-4 mb-5">
+          {images.map((image: any, index: any) => (
+            <div
+              key={index}
+              className="shadow-lg p-4 grid grid-cols-2 gap-4 mb-5"
+            >
               <div>
                 <div className="h-96 bg-gray-200 mb-3">
-                  <img
+                  <Image
                     src={image.preview}
-                    alt=""
+                    key={index}
                     className="object-cover w-full h-full"
                   />
                 </div>
@@ -107,8 +117,8 @@ const UploadImages = () => {
                 </p>
 
                 <div className="grid grid-cols-2">
-                  {furnitureOptions.map((option) => (
-                    <div className="mb-3">
+                  {furnitureOptions.map((option, index) => (
+                    <div key={index} className="mb-3">
                       <input
                         type="radio"
                         name={`furniture${images.indexOf(image)}`}
