@@ -1,8 +1,9 @@
-import { useState, useRef, ChangeEvent } from "react";
+import { useRef, ChangeEvent, useContext } from "react";
 import Image from "next/image";
+import { CartContext } from "../context/CartContext";
 
-const UploadImages = ({ ...props }) => {
-  const [images, setImages]: any = useState([]);
+const UploadImages = () => {
+  const { total, setTotal, images, setImages } = useContext(CartContext);
 
   const handleImages = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -14,7 +15,24 @@ const UploadImages = ({ ...props }) => {
 
       const form = {
         furniture: "",
-        clutterRemoval: false,
+        optional: {
+          imageEnhancement: {
+            active: false,
+            price: 2,
+          },
+          clutterRemoval: {
+            active: false,
+            price: 10,
+          },
+          emptyRoom: {
+            active: false,
+            price: 25,
+          },
+          wallColor: {
+            active: false,
+            price: 25,
+          },
+        },
         comments: "",
       };
 
@@ -24,14 +42,36 @@ const UploadImages = ({ ...props }) => {
     }
   };
 
-  const deleteImages = (image: any): void => {
-    setImages(images.filter((e: any) => e !== image));
-  };
+  // const deleteImages = (image: any): void => {
+  //   const sum = Object.values(image.form.optional)
+  //     .map((e: any) => e.active && e.price)
+  //     .reduce((a: any, b: any) => a + b);
+
+  //   setTotal(total - sum);
+
+  //   const updatedImages = images.filter(
+  //     (e: any) => e.preview !== image.preview
+  //   );
+
+  //   setImages(updatedImages);
+
+  //   console.log(images);
+  // };
 
   const updateForm = (event: any, image: any, option: any): void => {
-    const foundIndex = images.filter((x: any) => x.preview === image.preview);
+    const currentImage = images.filter((x: any) => x.preview === image.preview);
 
-    foundIndex[0].form[option] = event?.target.value;
+    currentImage[0].form[option] = event?.target.value;
+  };
+  const updateOptionalForm = (event: any, image: any, option: any): void => {
+    const currentImage = images.filter((x: any) => x.preview === image.preview);
+    const checked = event?.target.checked;
+
+    currentImage[0].form.optional[option].active = checked;
+
+    checked
+      ? setTotal(total + currentImage[0].form.optional[option].price)
+      : setTotal(total - currentImage[0].form.optional[option].price);
   };
 
   const furnitureOptions: string[] = [
@@ -40,6 +80,17 @@ const UploadImages = ({ ...props }) => {
     "Traditional",
     "Scandinavian",
     "Beach",
+  ];
+
+  const optionalOptions: { option: string; name: string; price: number }[] = [
+    { option: "imageEnhancement", name: "Image enhancement", price: 2 },
+    { option: "clutterRemoval", name: "Clutter removal", price: 10 },
+    { option: "emptyRoom", name: "Empty room (remove everything)", price: 25 },
+    {
+      option: "wallColor",
+      name: "Modify wall color or floor style",
+      price: 25,
+    },
   ];
 
   const hiddenFileInput = useRef<HTMLInputElement>(null);
@@ -70,6 +121,7 @@ const UploadImages = ({ ...props }) => {
               ref={hiddenFileInput}
               onChange={handleImages}
               multiple
+              accept=".jpg,.jpeg,.png"
               className="hidden"
             />
           </>
@@ -94,10 +146,7 @@ const UploadImages = ({ ...props }) => {
                 </div>
                 <p>
                   {image.name}
-                  <span
-                    className="text-red-500 underline ml-3 cursor-pointer"
-                    onClick={() => deleteImages(image)}
-                  >
+                  <span className="text-red-500 underline ml-3 cursor-pointer">
                     Delete
                   </span>
                 </p>
@@ -141,68 +190,45 @@ const UploadImages = ({ ...props }) => {
 
                 <p className="text-xl font-medium my-4">Optional</p>
 
-                <div className="flex items-center mb-3">
-                  <input
-                    type="checkbox"
-                    name="image"
-                    id="image"
-                    className="mr-3 accent-black"
-                  />
-                  <label htmlFor="image" className="mr-auto">
-                    Image enhancement
-                  </label>
-                  <span className="font-bold flex items-center">
-                    <span className="text-xs -mt-1">$</span>2.00
-                  </span>
-                </div>
-                <div className="flex items-center mb-3">
-                  <input
-                    type="checkbox"
-                    name="image"
-                    id="clutter"
-                    className="mr-3 accent-black"
-                  />
-                  <label htmlFor="clutter" className="mr-auto">
-                    Clutter removal
-                  </label>
-                  <span className="font-bold flex items-center">
-                    <span className="text-xs -mt-1">$</span>10.00
-                  </span>
-                </div>
-                <div className="flex items-center mb-3">
-                  <input
-                    type="checkbox"
-                    name="image"
-                    id="empty"
-                    className="mr-3 accent-black"
-                  />
-                  <label htmlFor="empty" className="mr-auto">
-                    Empty room (remove everything)
-                  </label>
-                  <span className="font-bold flex items-center">
-                    <span className="text-xs -mt-1">$</span>25.00
-                  </span>
-                </div>
-                <div className="flex items-center mb-3">
-                  <input
-                    type="checkbox"
-                    name="image"
-                    id="modify"
-                    className="mr-3 accent-black"
-                  />
-                  <label htmlFor="modify" className="mr-auto">
-                    Modify wall color or floor style
-                  </label>
-                  <span className="font-bold flex items-center">
-                    <span className="text-xs -mt-1">$</span>25.00
-                  </span>
-                </div>
-                <textarea
-                  name=""
-                  id=""
-                  placeholder="add comments or any additional remarks here"
-                  className="resize-none w-full bg-gray-100 border p-4 placeholder:text-gray-800 mt-2"
-                ></textarea>
+                {optionalOptions.map((option, index) => (
+                  <div key={index} className="flex items-center mb-3">
+                    <input
+                      onClick={(e) =>
+                        updateOptionalForm(e, image, option.option)
+                      }
+                      type="checkbox"
+                      name={`${option.name.toLowerCase()}${images.indexOf(
+                        image
+                      )}`}
+                      id={`${option.name.toLowerCase()}${images.indexOf(
+                        image
+                      )}`}
+                      className="mr-3 accent-black"
+                    />
+                    <label
+                      htmlFor={`${option.name.toLowerCase()}${images.indexOf(
+                        image
+                      )}`}
+                      className="mr-auto"
+                    >
+                      {option.name}
+                    </label>
+                    <span className="font-bold flex items-center">
+                      <span className="text-xs -mt-1">$</span>
+                      {option.price}
+                    </span>
+                  </div>
+                ))}
+
+                {image.form.optional.wallColor.active && (
+                  <textarea
+                    onChange={(e) => updateForm(e, image, "comments")}
+                    name=""
+                    id=""
+                    placeholder="add comments or any additional remarks here"
+                    className="resize-none w-full bg-gray-100 border p-4 placeholder:text-gray-800 mt-2"
+                  ></textarea>
+                )}
               </div>
             </div>
           ))}
@@ -223,6 +249,7 @@ const UploadImages = ({ ...props }) => {
               ref={hiddenFileInput}
               onChange={handleImages}
               className="hidden"
+              accept=".jpg,.jpeg,.png"
               multiple
             />
           </div>

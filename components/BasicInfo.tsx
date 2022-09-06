@@ -1,4 +1,9 @@
-const BasicInfo = ({...props}) => {
+import { useContext } from "react";
+import { CartContext } from "../context/CartContext";
+
+const BasicInfo = () => {
+  const { jobName, setJobName } = useContext(CartContext);
+
   return (
     <>
       <div className="max-w-[885px] mx-auto">
@@ -8,9 +13,11 @@ const BasicInfo = ({...props}) => {
           Job Name
         </label>
         <input
+          onChange={(e) => setJobName(e.target.value)}
           type="text"
           name="job"
           id="job"
+          value={jobName}
           placeholder="Enter Job Name"
           className="w-full border px-6 py-3 bg-gray-100 placeholder:text-gray-800"
         />

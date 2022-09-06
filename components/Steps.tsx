@@ -1,4 +1,9 @@
+import { useContext } from "react";
+import { CartContext } from "../context/CartContext";
+
 const Steps = ({ ...props }) => {
+  const { total } = useContext(CartContext);
+
   return (
     <>
       {props.step === 0 && (
@@ -33,7 +38,8 @@ const Steps = ({ ...props }) => {
             <div className="text-center">
               <p className="text-gray-500">Total</p>
               <span className="font-semibold flex items-center text-xl">
-                <span className="text-xs -mt-1">$</span>0.00
+                <span className="text-xs -mt-1">$</span>
+                {total}.00
               </span>
             </div>
           </div>
@@ -66,7 +72,7 @@ const Steps = ({ ...props }) => {
 
               <div className="flex flex-col items-center font-medium">
                 <span className="w-8 h-8 flex items-center justify-center bg-black text-white rounded-full">
-                  1
+                  2
                 </span>
                 <span className="mt-2">Upload images</span>
               </div>
@@ -83,7 +89,8 @@ const Steps = ({ ...props }) => {
             <div className="text-center">
               <p className="text-gray-500">Total</p>
               <span className="font-semibold flex items-center text-xl">
-                <span className="text-xs -mt-1">$</span>0.00
+                <span className="text-xs -mt-1">$</span>
+                {total}.00
               </span>
             </div>
           </div>
@@ -144,7 +151,8 @@ const Steps = ({ ...props }) => {
             <div className="text-center">
               <p className="text-gray-500">Total</p>
               <span className="font-semibold flex items-center text-xl">
-                <span className="text-xs -mt-1">$</span>0.00
+                <span className="text-xs -mt-1">$</span>
+                {total}.00
               </span>
             </div>
           </div>

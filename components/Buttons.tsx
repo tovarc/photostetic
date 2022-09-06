@@ -34,6 +34,7 @@ const Buttons = ({ ...props }) => {
               Previous
             </button>
           )}
+
           {props.step !== 2 && (
             <button
               onClick={props.nextStep}
